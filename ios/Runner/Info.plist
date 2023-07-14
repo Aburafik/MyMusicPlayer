@@ -26,6 +26,8 @@
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+          <key>NSMicrophoneUsageDescription</key>
+          <string>... explain why the app uses the microphone here ...</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
@@ -47,5 +49,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+          <key>NSAppTransportSecurity</key>
+          <dict>
+                    <key>NSAllowsArbitraryLoads</key>
+                    <true/>
+          </dict>
+          
 </dict>
 </plist>

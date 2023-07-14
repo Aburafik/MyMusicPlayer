@@ -1,7 +1,47 @@
+import 'package:demos_app/player_view.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  final player = AudioPlayer();
+  @override
+  void initState() {
+    playAudio();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  playAudio() async {
+    try {
+      // await player.setUrl("http://phish.in/audio/000/017/963/17963.mp3");
+    } on PlayerException catch (e) {
+      // iOS/macOS: maps to NSError.code
+      // Android: maps to ExoPlayerException.type
+      // Web: maps to MediaError.code
+      // Linux/Windows: maps to PlayerErrorCode.index
+      print("Error code: ${e.code}");
+      // iOS/macOS: maps to NSError.localizedDescription
+      // Android: maps to ExoPlaybackException.getMessage()
+      // Web/Linux: a generic message
+      // Windows: MediaPlayerError.message
+      print("Error message: ${e.message}");
+    } on PlayerInterruptedException catch (e) {
+      // This call was interrupted since another audio source was loaded or the
+      // player was stopped or disposed before this audio source could complete
+      // loading.
+      print("Connection aborted: ${e.message}");
+    } catch (e) {
+      // Fallback for all other errors
+      print('An error occured: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +93,7 @@ class HomeView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
+                    SizedBox(
                       height: 124,
                       // color: Colors.blue,
                       child: Row(
@@ -109,18 +149,26 @@ class HomeView extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
-                                    children: const [
-                                      OpacityCards(
-                                        image: "images/fav.png",
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () async {
+                                          await player.setUrl(
+                                              "https://www.shazam.com/track/40333609/river-flows-in-you");
+                                          player.play();
+                                          print("Playing now...");
+                                        },
+                                        child: const OpacityCards(
+                                          image: "images/fav.png",
+                                        ),
                                       ),
                                       // const SizedBox(width: 10),
-                                      SizedBox(width: 16),
+                                      const SizedBox(width: 16),
 
-                                      OpacityCards(
+                                      const OpacityCards(
                                         image: "images/sys.png",
                                       ),
-                                      SizedBox(width: 16),
-                                      OpacityCards(
+                                      const SizedBox(width: 16),
+                                      const OpacityCards(
                                         image: "images/add.png",
                                       ),
                                     ],
@@ -132,19 +180,31 @@ class HomeView extends StatelessWidget {
                           //
                           //
                           // const SizedBox(width: 109),
-                          Container(
-                            width: 90,
-                            height: 90,
-                            decoration: const ShapeDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment(0.99, -0.12),
-                                end: Alignment(-0.99, 0.12),
-                                colors: [Color(0xC1DDFFE9), Color(0xF7D5FFE4)],
+                          GestureDetector(
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const PlayView())),
+                            child: Hero(
+                              tag: "play",
+                              child: Container(
+                                width: 90,
+                                height: 90,
+                                decoration: const ShapeDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment(0.99, -0.12),
+                                    end: Alignment(-0.99, 0.12),
+                                    colors: [
+                                      Color(0xC1DDFFE9),
+                                      Color(0xF7D5FFE4)
+                                    ],
+                                  ),
+                                  shape: OvalBorder(),
+                                ),
+                                child: Center(
+                                    child: Image.asset("images/play.png")),
                               ),
-                              shape: OvalBorder(),
                             ),
-                            child:
-                                Center(child: Image.asset("images/play.png")),
                           ),
                         ],
                       ),
@@ -192,16 +252,17 @@ class HomeView extends StatelessWidget {
                       ],
                     ),
                     SizedBox(
-                        // color: Colors.red,
-                        height: MediaQuery.of(context).size.height,
-                        child: ListView.builder(
-                          itemCount: playList.length,
-                          itemBuilder: (context, index) => NewReleaseCompnent(
-                            title: playList[index]['title'],
-                            subTitle: playList[index]['subtitle'],
-                            imageTitle: playList[index]['image'],
-                          ),
-                        ))
+                      // color: Colors.red,
+                      height: MediaQuery.of(context).size.height,
+                      child: ListView.builder(
+                        itemCount: playList.length,
+                        itemBuilder: (context, index) => NewReleaseCompnent(
+                          title: playList[index]['title'],
+                          subTitle: playList[index]['subtitle'],
+                          imageTitle: playList[index]['image'],
+                        ),
+                      ),
+                    )
                     ////////////////////////
                   ],
                 ),
