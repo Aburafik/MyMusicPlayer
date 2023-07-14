@@ -41,32 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Widget _buildBottomSheet(
-    BuildContext context,
-    ScrollController scrollController,
-    double bottomSheetOffset,
-  ) {
-    return Material(
-      child: Container(
-        child: ListView(
-          controller: scrollController,
-          children: const [
-            Text("kjsdkjkjkjds"),
-            Text("kjsdkjkjkjds"),
-            Text("kjsdkjkjkjds"),
-            Text("kjsdkjkjkjds"),
-            Text("kjsdkjkjkjds"),
-            Text("kjsdkjkjkjds"),
-            Text("kjsdkjkjkjds"),
-            Text("kjsdkjkjkjds"),
-            Text("kjsdkjkjkjds"),
-            Text("kjsdkjkjkjds"),
-            Text("kjsdkjkjkjds"),
-          ],
-        ),
-      ),
-    );
-  }
+ 
 
   @override
   Widget build(BuildContext context) {

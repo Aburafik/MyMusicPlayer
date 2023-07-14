@@ -13,34 +13,9 @@ class _HomeViewState extends State<HomeView> {
   final player = AudioPlayer();
   @override
   void initState() {
-    playAudio();
+    // playAudio();
     // TODO: implement initState
     super.initState();
-  }
-
-  playAudio() async {
-    try {
-      // await player.setUrl("http://phish.in/audio/000/017/963/17963.mp3");
-    } on PlayerException catch (e) {
-      // iOS/macOS: maps to NSError.code
-      // Android: maps to ExoPlayerException.type
-      // Web: maps to MediaError.code
-      // Linux/Windows: maps to PlayerErrorCode.index
-      print("Error code: ${e.code}");
-      // iOS/macOS: maps to NSError.localizedDescription
-      // Android: maps to ExoPlaybackException.getMessage()
-      // Web/Linux: a generic message
-      // Windows: MediaPlayerError.message
-      print("Error message: ${e.message}");
-    } on PlayerInterruptedException catch (e) {
-      // This call was interrupted since another audio source was loaded or the
-      // player was stopped or disposed before this audio source could complete
-      // loading.
-      print("Connection aborted: ${e.message}");
-    } catch (e) {
-      // Fallback for all other errors
-      print('An error occured: $e');
-    }
   }
 
   @override
@@ -93,7 +68,7 @@ class _HomeViewState extends State<HomeView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
+                    Container(
                       height: 124,
                       // color: Colors.blue,
                       child: Row(
@@ -149,26 +124,18 @@ class _HomeViewState extends State<HomeView> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () async {
-                                          await player.setUrl(
-                                              "https://www.shazam.com/track/40333609/river-flows-in-you");
-                                          player.play();
-                                          print("Playing now...");
-                                        },
-                                        child: const OpacityCards(
-                                          image: "images/fav.png",
-                                        ),
+                                    children: const [
+                                      OpacityCards(
+                                        image: "images/fav.png",
                                       ),
                                       // const SizedBox(width: 10),
-                                      const SizedBox(width: 16),
+                                      SizedBox(width: 16),
 
-                                      const OpacityCards(
+                                      OpacityCards(
                                         image: "images/sys.png",
                                       ),
-                                      const SizedBox(width: 16),
-                                      const OpacityCards(
+                                      SizedBox(width: 16),
+                                      OpacityCards(
                                         image: "images/add.png",
                                       ),
                                     ],
@@ -252,17 +219,17 @@ class _HomeViewState extends State<HomeView> {
                       ],
                     ),
                     SizedBox(
-                      // color: Colors.red,
-                      height: MediaQuery.of(context).size.height,
-                      child: ListView.builder(
-                        itemCount: playList.length,
-                        itemBuilder: (context, index) => NewReleaseCompnent(
-                          title: playList[index]['title'],
-                          subTitle: playList[index]['subtitle'],
-                          imageTitle: playList[index]['image'],
-                        ),
-                      ),
-                    )
+
+                        // color: Colors.red,
+                        height: MediaQuery.of(context).size.height / 2.5,
+                        child: ListView.builder(
+                          itemCount: playList.length,
+                          itemBuilder: (context, index) => NewReleaseCompnent(
+                            title: playList[index]['title'],
+                            subTitle: playList[index]['subtitle'],
+                            imageTitle: playList[index]['image'],
+                          ),
+                        ))
                     ////////////////////////
                   ],
                 ),
