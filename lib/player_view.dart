@@ -1,5 +1,15 @@
+import 'package:demos_app/data.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+
+import 'package:audio_session/audio_session.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:just_audio/just_audio.dart';
+// import 'package:just_audio_example/common.dart';
+import 'package:rxdart/rxdart.dart';
+import 'dart:math';
 
 class PlayView extends StatefulWidget {
   const PlayView({super.key});
@@ -8,38 +18,133 @@ class PlayView extends StatefulWidget {
   State<PlayView> createState() => _PlayViewState();
 }
 
-class _PlayViewState extends State<PlayView> {
-  final player = AudioPlayer();
+class _PlayViewState extends State<PlayView> with WidgetsBindingObserver {
+  late AudioPlayer _player;
+  final _playlist = ConcatenatingAudioSource(children: [
+    // Remove this audio source from the Windows and Linux version because it's not supported yet
+    if (kIsWeb ||
+        ![TargetPlatform.windows, TargetPlatform.linux]
+            .contains(defaultTargetPlatform))
+      ClippingAudioSource(
+        start: const Duration(seconds: 60),
+        end: const Duration(seconds: 90),
+        child: AudioSource.uri(Uri.parse(
+            "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3")),
+        tag: AudioMetadata(
+          album: "Science Friday",
+          title: "A Salute To Head-Scratching Science (30 seconds)",
+          artwork:
+              "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
+        ),
+      ),
+    AudioSource.uri(
+      Uri.parse(
+          "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"),
+      tag: AudioMetadata(
+        album: "Science Friday",
+        title: "A Salute To Head-Scratching Science",
+        artwork:
+            "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
+      ),
+    ),
+    AudioSource.uri(
+      Uri.parse("https://s3.amazonaws.com/scifri-segments/scifri201711241.mp3"),
+      tag: AudioMetadata(
+        album: "Science Friday",
+        title: "From Cat Rheology To Operatic Incompetence",
+        artwork:
+            "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
+      ),
+    ),
+    AudioSource.uri(
+      Uri.parse("asset:///audio/nature.mp3"),
+      tag: AudioMetadata(
+        album: "Public Domain",
+        title: "Nature Sounds",
+        artwork:
+            "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
+      ),
+    ),
+  ]);
+  int _addedCount = 0;
+  final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
   @override
   void initState() {
-    playAudio();
-    // playerStreamer();
     super.initState();
+    ambiguate(WidgetsBinding.instance)!.addObserver(this);
+    _player = AudioPlayer();
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+    ));
+    _init();
   }
 
-  playerStreamer() {
-    player.bufferedPositionStream.listen((state) {
-      print(state.inMinutes);
-      print("processing");
+  Future<void> _init() async {
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.speech());
+    // Listen to errors during playback.
+    _player.playbackEventStream.listen((event) {},
+        onError: (Object e, StackTrace stackTrace) {
+      print('A stream error occurred: $e');
+    });
+    try {
+      // Preloading audio is not currently supported on Linux.
+      await _player.setAudioSource(_playlist,
+          preload: kIsWeb || defaultTargetPlatform != TargetPlatform.linux);
+    } catch (e) {
+      // Catch load errors: 404, invalid url...
+      print("Error loading audio source: $e");
+    }
+    // Show a snackbar whenever reaching the end of an item in the playlist.
+    _player.positionDiscontinuityStream.listen((discontinuity) {
+      if (discontinuity.reason == PositionDiscontinuityReason.autoAdvance) {
+        _showItemFinished(discontinuity.previousEvent.currentIndex);
+      }
+    });
+    _player.processingStateStream.listen((state) {
+      if (state == ProcessingState.completed) {
+        _showItemFinished(_player.currentIndex);
+      }
     });
   }
 
-  playAudio() async {
-    try {
-      await player.setUrl(
-          "https://res.cloudinary.com/citizen/video/upload/v1689356892/AudioFiles/Stonebwoy_-_Into_The_Future_Official_Music_Video_128_kbps_pxe7o0.mp3");
-    } on PlayerException catch (e) {
-      print("Error code: ${e.code}");
+  void _showItemFinished(int? index) {
+    if (index == null) return;
+    final sequence = _player.sequence;
+    if (sequence == null) return;
+    final source = sequence[index];
+    final metadata = source.tag as AudioMetadata;
+    _scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(
+      content: Text('Finished playing ${metadata.title}'),
+      duration: const Duration(seconds: 1),
+    ));
+  }
 
-      print("Error message: ${e.message}");
-    } on PlayerInterruptedException catch (e) {
-      print("Connection aborted: ${e.message}");
-    } catch (e) {
-      print('An error occured: $e');
+  @override
+  void dispose() {
+    ambiguate(WidgetsBinding.instance)!.removeObserver(this);
+    _player.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      // Release the player's resources when not in use. We use "stop" so that
+      // if the app resumes later, it will still remember what position to
+      // resume from.
+      _player.stop();
     }
   }
 
-  bool play = false;
+  Stream<PositionData> get _positionDataStream =>
+      Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
+          _player.positionStream,
+          _player.bufferedPositionStream,
+          _player.durationStream,
+          (position, bufferedPosition, duration) => PositionData(
+              position, bufferedPosition, duration ?? Duration.zero));
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -203,19 +308,7 @@ class _PlayViewState extends State<PlayView> {
                 Hero(
                   tag: "play",
                   child: GestureDetector(
-                    onTap: () async {
-                      setState(() {
-                        play = !play;
-
-                        play ? player.play() : player.pause();
-                        playerStreamer();
-                        print(
-                            ":::::::::::::::::::::::::::${player.playing}::::::::::::::::::::::::::::::::::");
-                    
-                      });
-                      print("Playing now...");
-                      print(player.bufferedPosition.inSeconds);
-                    },
+                    onTap: () async {},
                     child: Container(
                       width: 83.53,
                       height: 81.53,
@@ -228,9 +321,7 @@ class _PlayViewState extends State<PlayView> {
                         shape: OvalBorder(),
                       ),
                       child: Center(
-                        child: Image.asset(player.playing
-                            ? "images/pause.png"
-                            : "images/play.png"),
+                        child: Image.asset("images/play.png"),
                       ),
                     ),
                   ),

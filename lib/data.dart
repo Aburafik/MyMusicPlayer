@@ -36,10 +36,10 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         start: const Duration(seconds: 60),
         end: const Duration(seconds: 90),
         child: AudioSource.uri(Uri.parse(
-            "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3")),
+            "https://res.cloudinary.com/citizen/video/upload/v1689358036/AudioFiles/Stonebwoy_-_Non_Stop_Visualizer_128_kbps_yygyqm.mp3")),
         tag: AudioMetadata(
-          album: "Science Friday",
-          title: "A Salute To Head-Scratching Science (30 seconds)",
+          album: "Non Stop Visualizer",
+          title: "StoneBwoy",
           artwork:
               "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
         ),
@@ -309,7 +309,6 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
             ],
           ),
         ),
-       
       ),
     );
   }
@@ -426,7 +425,6 @@ class AudioMetadata {
   });
 }
 
-
 class SeekBar extends StatefulWidget {
   final Duration duration;
   final Duration position;
@@ -467,11 +465,13 @@ class SeekBarState extends State<SeekBar> {
         SliderTheme(
           data: _sliderThemeData.copyWith(
             thumbShape: HiddenThumbComponentShape(),
-            activeTrackColor: Colors.blue.shade100,
-            inactiveTrackColor: Colors.grey.shade300,
+            activeTrackColor: Color(0xFFB3CEBD),
+            inactiveTrackColor: Color(0xfff5E5A5A),
+            thumbColor: Color(0xFFB3CEBD),
           ),
           child: ExcludeSemantics(
             child: Slider(
+              thumbColor: Color(0xFFB3CEBD),
               min: 0.0,
               max: widget.duration.inMilliseconds.toDouble(),
               value: min(widget.bufferedPosition.inMilliseconds.toDouble(),
