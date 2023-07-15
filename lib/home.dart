@@ -242,7 +242,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                               state!.currentSource!.tag as AudioMetadata;
 
                           return Container(
-                            height: 124,
+                            height: 134,
                             // color: Colors.blue,
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -259,73 +259,72 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        SizedBox(
-                                          width: double.infinity,
-                                          height: 60,
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                width: double.infinity,
-                                                child: Text(
-                                                  metadata.album,
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 24,
-                                                    fontFamily: 'Poppins',
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ),
-                                              Text(
-                                                metadata.title,
-                                                style: TextStyle(
-                                                  color: Color(0xFFD5FFE4),
-                                                  fontSize: 16,
-                                                  fontFamily: 'Poppins',
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(height: 19),
-                                        Row(
+                                        Column(
                                           mainAxisSize: MainAxisSize.min,
                                           mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                              MainAxisAlignment.center,
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            const OpacityCards(
-                                              image: "images/fav.png",
-                                            ),
-                                            const SizedBox(width: 16),
-                                            const OpacityCards(
-                                              image: "images/sys.png",
-                                            ),
-                                            const SizedBox(width: 16),
-
-                                            OpacityCards(
-                                              image: "images/vol.png",
-                                              onTap: () => showSliderDialog(
-                                                context: context,
-                                                title: "Adjust volume",
-                                                divisions: 10,
-                                                min: 0.0,
-                                                max: 1.0,
-                                                value: _player.volume,
-                                                stream: _player.volumeStream,
-                                                onChanged: _player.setVolume,
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: Text(
+                                                metadata.album,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 24,
+                                                  fontFamily: 'Poppins',
+                                                  fontWeight: FontWeight.w600,
+                                                ),
                                               ),
                                             ),
-                                            // const SizedBox(width: 10),
+                                            Text(
+                                              metadata.title,
+                                              style: const TextStyle(
+                                                color: Color(0xFFD5FFE4),
+                                                fontSize: 16,
+                                                fontFamily: 'Poppins',
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            SizedBox(height: 10),
+                                            Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                const OpacityCards(
+                                                  image: "images/fav.png",
+                                                ),
+                                                const SizedBox(width: 16),
+                                                const OpacityCards(
+                                                  image: "images/sys.png",
+                                                ),
+                                                const SizedBox(width: 16),
+
+                                                OpacityCards(
+                                                  image: "images/vol.png",
+                                                  onTap: () => showSliderDialog(
+                                                    context: context,
+                                                    title: "Adjust volume",
+                                                    divisions: 10,
+                                                    min: 0.0,
+                                                    max: 1.0,
+                                                    value: _player.volume,
+                                                    stream:
+                                                        _player.volumeStream,
+                                                    onChanged:
+                                                        _player.setVolume,
+                                                  ),
+                                                ),
+                                                // const SizedBox(width: 10),
+                                              ],
+                                            ),
                                           ],
                                         ),
+                                        // const SizedBox(height: 19),
                                       ],
                                     ),
                                   ),
@@ -334,10 +333,6 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                 //
                                 // const SizedBox(width: 109),
                                 GestureDetector(
-                                  // onTap: () => Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (_) => const PlayView())),
                                   child: Hero(
                                     tag: "play",
                                     child: Container(
