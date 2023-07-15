@@ -165,7 +165,8 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                child: StreamBuilder<SequenceState?>(
+                child: 
+                StreamBuilder<SequenceState?>(
                   stream: _player.sequenceStateStream,
                   builder: (context, snapshot) {
                     final state = snapshot.data;
@@ -191,6 +192,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   },
                 ),
               ),
+
               ControlButtons(_player),
               StreamBuilder<PositionData>(
                 stream: _positionDataStream,
@@ -465,13 +467,13 @@ class SeekBarState extends State<SeekBar> {
         SliderTheme(
           data: _sliderThemeData.copyWith(
             thumbShape: HiddenThumbComponentShape(),
-            activeTrackColor: Color(0xFFB3CEBD),
-            inactiveTrackColor: Color(0xfff5E5A5A),
-            thumbColor: Color(0xFFB3CEBD),
+            activeTrackColor: const Color(0xFF5e5a5a),
+            inactiveTrackColor: const Color(0xFFB3CEBD),
+
+            // activeTickMarkColor: Colors.red,
           ),
           child: ExcludeSemantics(
             child: Slider(
-              thumbColor: Color(0xFFB3CEBD),
               min: 0.0,
               max: widget.duration.inMilliseconds.toDouble(),
               value: min(widget.bufferedPosition.inMilliseconds.toDouble(),
@@ -498,6 +500,8 @@ class SeekBarState extends State<SeekBar> {
             inactiveTrackColor: Colors.transparent,
           ),
           child: Slider(
+            thumbColor: const Color(0xFFB3CEBD),
+            activeColor: const Color(0xFFB3CEBD),
             min: 0.0,
             max: widget.duration.inMilliseconds.toDouble(),
             value: min(_dragValue ?? widget.position.inMilliseconds.toDouble(),
@@ -519,15 +523,21 @@ class SeekBarState extends State<SeekBar> {
           ),
         ),
         Positioned(
-          right: 16.0,
-          bottom: 0.0,
-          child: Text(
+            right: 16.0,
+            bottom: 0.0,
+            child: Text(
               RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
                       .firstMatch("$_remaining")
                       ?.group(1) ??
                   '$_remaining',
-              style: Theme.of(context).textTheme.bodySmall),
-        ),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontFamily: 'SF Pro Display',
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0.07,
+              ),
+            )),
       ],
     );
   }
@@ -579,6 +589,7 @@ void showSliderDialog({
   showDialog<void>(
     context: context,
     builder: (context) => AlertDialog(
+      backgroundColor: Colors.white.withOpacity(.4),
       title: Text(title, textAlign: TextAlign.center),
       content: StreamBuilder<double>(
         stream: stream,

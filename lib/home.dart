@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:demos_app/data.dart';
 import 'package:demos_app/player_view.dart';
 import 'package:flutter/material.dart';
@@ -154,16 +156,52 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
             Positioned(
               left: -129,
               top: -49,
-              child: Container(
-                width: 686,
-                height: 386,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("images/img1.png"),
-                    fit: BoxFit.fill,
-                  ),
-                ),
+              child: StreamBuilder<SequenceState?>(
+                stream: _player.sequenceStateStream,
+                builder: (context, snapshot) {
+                  final state = snapshot.data;
+                  if (state?.sequence.isEmpty ?? true) {
+                    return const SizedBox();
+                  }
+                  final metadata = state!.currentSource!.tag as AudioMetadata;
+                  return Container(
+                    width: 686,
+                    height: 386,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(metadata.artwork.toString()),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+
+                  // Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   children: [
+                  //     Expanded(
+                  //       child: Padding(
+                  //         padding: const EdgeInsets.all(8.0),
+                  //         child: Center(child: Image.network(metadata.artwork)),
+                  //       ),
+                  //     ),
+                  //     Text(metadata.album,
+                  //         style: Theme.of(context).textTheme.titleLarge),
+                  //     Text(metadata.title),
+                  //   ],
+                  // );
+                },
               ),
+
+              // Container(
+              //   width: 686,
+              //   height: 386,
+              //   decoration: const BoxDecoration(
+              //     image: DecorationImage(
+              //       image: AssetImage("images/img1.png"),
+              //       fit: BoxFit.fill,
+              //     ),
+              //   ),
+              // ),
             ),
             Positioned(
               left: 0,
@@ -205,7 +243,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
 
                           return Container(
                             height: 124,
-                            color: Colors.blue,
+                            // color: Colors.blue,
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -243,8 +281,8 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                                   ),
                                                 ),
                                               ),
-                                              const Text(
-                                                'Lonely mixn',
+                                              Text(
+                                                metadata.title,
                                                 style: TextStyle(
                                                   color: Color(0xFFD5FFE4),
                                                   fontSize: 16,
@@ -378,7 +416,6 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
 
                           //////////////////////////////
                         }),
-                    Text("kdfkkdf"),
                     StreamBuilder<PositionData>(
                       stream: _positionDataStream,
                       builder: (context, snapshot) {
@@ -431,7 +468,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                               ),
                             ),
                             child: Text(
-                              'See all',
+                              'Expand',
                               style: TextStyle(
                                 color: Colors.white
                                     .withOpacity(0.8999999761581421),
