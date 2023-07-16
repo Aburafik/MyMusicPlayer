@@ -1,20 +1,15 @@
-// This example demonstrates how to play a playlist with a mix of URI and asset
-// audio sources, and the ability to add/remove/reorder playlist items.
-//
-// To run:
-//
-// flutter run -t lib/example_playlist.dart
+
+
+// ignore_for_file: depend_on_referenced_packages
 
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
-// import 'package:just_audio_example/common.dart';
 import 'package:rxdart/rxdart.dart';
 import 'dart:math';
 
-// import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
 
@@ -266,7 +261,9 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ),
               SizedBox(
                 height: 240.0,
-                child: StreamBuilder<SequenceState?>(
+                child:
+                
+                 StreamBuilder<SequenceState?>(
                   stream: _player.sequenceStateStream,
                   builder: (context, snapshot) {
                     final state = snapshot.data;

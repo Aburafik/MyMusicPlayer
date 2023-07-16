@@ -1,5 +1,6 @@
 import 'package:demos_app/home.dart';
 import 'package:flutter/material.dart';
+import 'package:slider_button/slider_button.dart';
 
 class IntroScreen extends StatelessWidget {
   const IntroScreen({super.key});
@@ -125,31 +126,46 @@ class IntroScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // const SizedBox(height: 46),
-                  GestureDetector(
-                    onTap: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const HomeView())),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFFD4FFE4),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Start',
-                          style: TextStyle(
-                            color: Color(0xFF141616),
-                            fontSize: 16,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+
+                  SliderButton(
+                    action: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => const HomeView()));
+
+                      ///Do something here OnSlide
+                    },
+
+                    ///Put label over here
+                    alignLabel: Alignment.centerRight,
+
+                    label: const Text(
+                      ">>>",
+                      style: TextStyle(
+                          color: Color(0xff4a4a4a),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20),
+                    ),
+                    icon: const Text(
+                      'Start',
+                      style: TextStyle(
+                        color: Color(0xFF141616),
+                        fontSize: 16,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ),
+                    // dismissible: false,
+
+                    ///Change All the color and size from here.
+                    width: MediaQuery.of(context).size.width,
+                    radius: 50,
+                    height: 60,
+                    buttonColor: const Color(0xFFD4FFE4),
+                    backgroundColor: const Color(0xFF2A2E2E),
+                    highlightedColor: Colors.white,
+                    baseColor: Colors.black,
+                    // shimmer: false,
+                  )
                 ],
               ),
             ),

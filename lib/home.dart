@@ -1,5 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'package:demos_app/components/new_release.dart';
+import 'package:demos_app/components/opacity_card.dart';
 import 'package:demos_app/data.dart';
 import 'package:demos_app/player_view.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +9,6 @@ import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-// import 'package:just_audio_example/common.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomeView extends StatefulWidget {
@@ -20,13 +21,10 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   late AudioPlayer _player;
   final _playlist = ConcatenatingAudioSource(children: [
-    // Remove this audio source from the Windows and Linux version because it's not supported yet
     if (kIsWeb ||
         ![TargetPlatform.windows, TargetPlatform.linux]
             .contains(defaultTargetPlatform))
       ClippingAudioSource(
-        // start: const Duration(seconds: 0),
-        // end: const Duration(seconds: 90),
         child: AudioSource.uri(Uri.parse(
             "https://res.cloudinary.com/citizen/video/upload/v1689356892/AudioFiles/Stonebwoy_-_Into_The_Future_Official_Music_Video_128_kbps_pxe7o0.mp3")),
         tag: AudioMetadata(
@@ -174,34 +172,8 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                       ),
                     ),
                   );
-
-                  // Column(
-                  //   crossAxisAlignment: CrossAxisAlignment.center,
-                  //   children: [
-                  //     Expanded(
-                  //       child: Padding(
-                  //         padding: const EdgeInsets.all(8.0),
-                  //         child: Center(child: Image.network(metadata.artwork)),
-                  //       ),
-                  //     ),
-                  //     Text(metadata.album,
-                  //         style: Theme.of(context).textTheme.titleLarge),
-                  //     Text(metadata.title),
-                  //   ],
-                  // );
                 },
               ),
-
-              // Container(
-              //   width: 686,
-              //   height: 386,
-              //   decoration: const BoxDecoration(
-              //     image: DecorationImage(
-              //       image: AssetImage("images/img1.png"),
-              //       fit: BoxFit.fill,
-              //     ),
-              //   ),
-              // ),
             ),
             Positioned(
               left: 0,
@@ -241,7 +213,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                           final metadata =
                               state!.currentSource!.tag as AudioMetadata;
 
-                          return Container(
+                          return SizedBox(
                             height: 134,
                             // color: Colors.blue,
                             child: Row(
@@ -249,159 +221,149 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                // Text(metadata.album,
-                                //     style:
-                                //         Theme.of(context).textTheme.titleLarge),
                                 Expanded(
-                                  child: Container(
-                                    // color: Colors.yellow,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              width: double.infinity,
-                                              child: Text(
-                                                metadata.album,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 24,
-                                                  fontFamily: 'Poppins',
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                            Text(
-                                              metadata.title,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: Text(
+                                              metadata.album,
                                               style: const TextStyle(
-                                                color: Color(0xFFD5FFE4),
-                                                fontSize: 16,
+                                                color: Colors.white,
+                                                fontSize: 24,
                                                 fontFamily: 'Poppins',
-                                                fontWeight: FontWeight.w500,
+                                                fontWeight: FontWeight.w600,
                                               ),
                                             ),
-                                            SizedBox(height: 10),
-                                            Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                const OpacityCards(
-                                                  image: "images/fav.png",
-                                                ),
-                                                const SizedBox(width: 16),
-                                                const OpacityCards(
-                                                  image: "images/sys.png",
-                                                ),
-                                                const SizedBox(width: 16),
-
-                                                OpacityCards(
-                                                  image: "images/vol.png",
-                                                  onTap: () => showSliderDialog(
-                                                    context: context,
-                                                    title: "Adjust volume",
-                                                    divisions: 10,
-                                                    min: 0.0,
-                                                    max: 1.0,
-                                                    value: _player.volume,
-                                                    stream:
-                                                        _player.volumeStream,
-                                                    onChanged:
-                                                        _player.setVolume,
-                                                  ),
-                                                ),
-                                                // const SizedBox(width: 10),
-                                              ],
+                                          ),
+                                          Text(
+                                            metadata.title,
+                                            style: const TextStyle(
+                                              color: Color(0xFFD5FFE4),
+                                              fontSize: 16,
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w500,
                                             ),
-                                          ],
-                                        ),
-                                        // const SizedBox(height: 19),
-                                      ],
-                                    ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              const OpacityCards(
+                                                image: "images/fav.png",
+                                              ),
+                                              const SizedBox(width: 16),
+                                              const OpacityCards(
+                                                image: "images/sys.png",
+                                              ),
+                                              const SizedBox(width: 16),
+
+                                              OpacityCards(
+                                                image: "images/vol.png",
+                                                onTap: () => showSliderDialog(
+                                                  context: context,
+                                                  title: "Adjust volume",
+                                                  divisions: 10,
+                                                  min: 0.0,
+                                                  max: 1.0,
+                                                  value: _player.volume,
+                                                  stream: _player.volumeStream,
+                                                  onChanged: _player.setVolume,
+                                                ),
+                                              ),
+                                              // const SizedBox(width: 10),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      // const SizedBox(height: 19),
+                                    ],
                                   ),
                                 ),
                                 //
                                 //
                                 // const SizedBox(width: 109),
-                                GestureDetector(
-                                  child: Hero(
-                                    tag: "play",
-                                    child: Container(
-                                      width: 90,
-                                      height: 90,
-                                      decoration: const ShapeDecoration(
-                                        gradient: LinearGradient(
-                                          begin: Alignment(0.99, -0.12),
-                                          end: Alignment(-0.99, 0.12),
-                                          colors: [
-                                            Color(0xC1DDFFE9),
-                                            Color(0xF7D5FFE4)
-                                          ],
-                                        ),
-                                        shape: OvalBorder(),
+                                Hero(
+                                  tag: "play",
+                                  child: Container(
+                                    width: 90,
+                                    height: 90,
+                                    decoration: const ShapeDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment(0.99, -0.12),
+                                        end: Alignment(-0.99, 0.12),
+                                        colors: [
+                                          Color(0xC1DDFFE9),
+                                          Color(0xF7D5FFE4)
+                                        ],
                                       ),
-                                      child: StreamBuilder<PlayerState>(
-                                        stream: _player.playerStateStream,
-                                        builder: (context, snapshot) {
-                                          final playerState = snapshot.data;
-                                          final processingState =
-                                              playerState?.processingState;
-                                          final playing = playerState?.playing;
-                                          if (processingState ==
-                                                  ProcessingState.loading ||
-                                              processingState ==
-                                                  ProcessingState.buffering) {
-                                            return Container(
-                                              margin: const EdgeInsets.all(8.0),
-                                              width: 64.0,
-                                              height: 64.0,
-                                              child:
-                                                  const CircularProgressIndicator(),
-                                            );
-                                          } else if (playing != true) {
-                                            return Material(
-                                              shape: const OvalBorder(),
-                                              color: const Color(0xC1DDFFE9),
-                                              child: IconButton(
-                                                icon: Image.asset(
-                                                    "images/play.png"),
-                                                iconSize: 64.0,
-                                                onPressed: _player.play,
-                                              ),
-                                            );
-                                          } else if (processingState !=
-                                              ProcessingState.completed) {
-                                            return Material(
-                                              color: const Color(0xC1DDFFE9),
-                                              shape: const OvalBorder(),
-                                              child: IconButton(
-                                                icon: Image.asset(
-                                                    "images/pause.png"),
-                                                iconSize: 64.0,
-                                                onPressed: _player.pause,
-                                              ),
-                                            );
-                                          } else {
-                                            return IconButton(
-                                              icon: const Icon(Icons.replay),
+                                      shape: OvalBorder(),
+                                    ),
+                                    child: StreamBuilder<PlayerState>(
+                                      stream: _player.playerStateStream,
+                                      builder: (context, snapshot) {
+                                        final playerState = snapshot.data;
+                                        final processingState =
+                                            playerState?.processingState;
+                                        final playing = playerState?.playing;
+                                        if (processingState ==
+                                                ProcessingState.loading ||
+                                            processingState ==
+                                                ProcessingState.buffering) {
+                                          return Container(
+                                            margin: const EdgeInsets.all(8.0),
+                                            width: 64.0,
+                                            height: 64.0,
+                                            child:
+                                                const CircularProgressIndicator(),
+                                          );
+                                        } else if (playing != true) {
+                                          return Material(
+                                            shape: const OvalBorder(),
+                                            color: const Color(0xC1DDFFE9),
+                                            child: IconButton(
+                                              icon: Image.asset(
+                                                  "images/play.png"),
                                               iconSize: 64.0,
-                                              onPressed: () => _player.seek(
-                                                  Duration.zero,
-                                                  index: _player
-                                                      .effectiveIndices!.first),
-                                            );
-                                          }
-                                        },
-                                      ),
+                                              onPressed: _player.play,
+                                            ),
+                                          );
+                                        } else if (processingState !=
+                                            ProcessingState.completed) {
+                                          return Material(
+                                            color: const Color(0xC1DDFFE9),
+                                            shape: const OvalBorder(),
+                                            child: IconButton(
+                                              icon: Image.asset(
+                                                  "images/pause.png"),
+                                              iconSize: 64.0,
+                                              onPressed: _player.pause,
+                                            ),
+                                          );
+                                        } else {
+                                          return IconButton(
+                                            icon: const Icon(Icons.replay),
+                                            iconSize: 64.0,
+                                            onPressed: () => _player.seek(
+                                                Duration.zero,
+                                                index: _player
+                                                    .effectiveIndices!.first),
+                                          );
+                                        }
+                                      },
                                     ),
                                   ),
                                 ),
@@ -447,7 +409,11 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                           onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => const PlayView())),
+                                  builder: (_) => PlayView(
+                                        player: _player,
+                                        positionDataStream: _positionDataStream,
+
+                                      ))),
                           child: Container(
                             width: 70,
                             height: 32,
@@ -542,139 +508,3 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   }
 }
 
-class NewReleaseCompnent extends StatelessWidget {
-  const NewReleaseCompnent({
-    super.key,
-    this.title,
-    this.subTitle,
-    this.imageTitle,
-    this.onTap,
-  });
-  final String? title;
-  final String? subTitle;
-  final String? imageTitle;
-  final void Function()? onTap;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 5),
-        child: Row(
-          children: [
-            Container(
-              width: 70,
-              height: 70,
-              decoration: ShapeDecoration(
-                image: DecorationImage(
-                  image: AssetImage(imageTitle!),
-                  fit: BoxFit.fill,
-                ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(2)),
-              ),
-            ),
-            const SizedBox(
-              width: 14,
-            ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title!,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          subTitle!,
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.699999988079071),
-                            fontSize: 14,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w500,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  const Text(
-                    "....",
-                    style: TextStyle(color: Colors.white),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class OpacityCards extends StatelessWidget {
-  const OpacityCards({
-    super.key,
-    required this.image,
-    this.onTap,
-  });
-  final String image;
-  final void Function()? onTap;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Opacity(
-        opacity: 0.60,
-        child: Container(
-          width: 45,
-          height: 45,
-          decoration: ShapeDecoration(
-            color: const Color(0xFF2A2E2E),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          ),
-          child: Center(
-            child: Image.asset(image),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-List playList = [
-  {
-    "image": "images/mag1.png",
-    "title": "Guitar Songs",
-    "subtitle": "Billie Eilish"
-  },
-  {
-    "image": "images/mag2.png",
-    "title": "No Dey Farm",
-    "subtitle": "Babyboy AV"
-  },
-  {
-    "image": "images/mag3.png",
-    "title": "Maria",
-    "subtitle": "Hwa Sa",
-  },
-  {
-    "image": "images/mag4.png",
-    "title": "King",
-    "subtitle": "Prom",
-  },
-];
-
-// https://i.ytimg.com/vi/WMRfgQf6q7s/mqdefault.jpg OnGOD
-
-//https://i.ytimg.com/vi/QWUVncnTNNE/mqdefault.jpg Taking Over
