@@ -80,14 +80,10 @@ class IntroScreen extends StatelessWidget {
                           color: Colors.white.withOpacity(0.800000011920929),
                           fontSize: 16,
                           fontFamily: 'Poppins',
-                          // fontWeight: FontWeight.w400,
-                          // height: 24,
-                          // letterSpacing: 0.08,
                         ),
                       ),
                     ],
                   ),
-                  // const SizedBox(height: 46),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 30),
                     child: Row(
@@ -126,13 +122,10 @@ class IntroScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   SliderButton(
                     action: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (_) => const HomeView()));
-
-                      ///Do something here OnSlide
                     },
 
                     ///Put label over here

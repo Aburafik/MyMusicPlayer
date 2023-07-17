@@ -328,7 +328,11 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                             width: 64.0,
                                             height: 64.0,
                                             child:
-                                                const CircularProgressIndicator(),
+                                                const CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation(
+                                                      Color(0xFF141616)),
+                                            ),
                                           );
                                         } else if (playing != true) {
                                           return Material(
@@ -412,7 +416,6 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                   builder: (_) => PlayView(
                                         player: _player,
                                         positionDataStream: _positionDataStream,
-
                                       ))),
                           child: Container(
                             width: 70,
@@ -507,4 +510,3 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     );
   }
 }
-
