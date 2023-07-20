@@ -150,12 +150,12 @@ class _PlayViewState extends State<PlayView> with WidgetsBindingObserver {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                child: Center(
+                child: const Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
+                    children: [
                       Opacity(
                         opacity: 0.70,
                         child: Text(

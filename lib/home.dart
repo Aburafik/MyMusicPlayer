@@ -28,6 +28,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
         child: AudioSource.uri(Uri.parse(
             "https://res.cloudinary.com/citizen/video/upload/v1689356892/AudioFiles/Stonebwoy_-_Into_The_Future_Official_Music_Video_128_kbps_pxe7o0.mp3")),
         tag: AudioMetadata(
+          id: "0",
           album: "Into The Future Official Music",
           title: "StoneBwoy",
           artwork: "images/img1.png",
@@ -37,6 +38,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
       Uri.parse(
           "https://res.cloudinary.com/citizen/video/upload/v1689421036/AudioFiles/SHATTA_WALE_-_ON_GOD_OFFICIAL_VIDEO_64_kbps_lvhhyk.mp3"),
       tag: AudioMetadata(
+        id: "1",
         album: "ON GOD OFFICIAL",
         title: "ShatTA_WALE",
         artwork: "images/mag1.png",
@@ -46,6 +48,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
       Uri.parse(
           "https://res.cloudinary.com/citizen/video/upload/v1689421031/AudioFiles/Shatta_Wale_-_Taking_Over_ft._Joint_77_Addi_Self_Captan_Official_Video_64_kbps_umlnky.mp3"),
       tag: AudioMetadata(
+        id: "2",
         album: "TAKING OVER",
         title: "ShatTa_WALE",
         artwork: "images/mag2.png",
@@ -55,13 +58,13 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
       Uri.parse(
           "https://res.cloudinary.com/citizen/video/upload/v1689357065/AudioFiles/STONEBWOY_-_Where_is_the_Love_-_Visualiser_2.0_128_kbps_sa89qq.mp3"),
       tag: AudioMetadata(
+        id: "3",
         album: "StoneBWOY",
         title: "Where is the Love",
         artwork: "images/mag3.png",
       ),
     ),
   ]);
-  int _addedCount = 0;
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
@@ -510,3 +513,4 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     );
   }
 }
+///https://www.behance.net/gallery/161599519/Tree-Planting-Mobile-App-UI-Case-Study
